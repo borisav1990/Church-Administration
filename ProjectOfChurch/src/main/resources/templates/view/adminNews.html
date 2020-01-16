@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <link rel="stylesheet" href="../../../assets/vendors/iconfonts/font-awesome/css/font-awesome.min.css" />
+    
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../assets/css/shared/style.css">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <!-- End Layout styles -->
+    <link rel="shortcut icon" href="../assets/images/favicon.png" />
+
+</head>
+<body>
+
+             
+        <div class="container-scroller">
+                 <div th:replace="view/partials/_navbar"></div>
+            <div class="container-fluid page-body-wrapper">
+                     <div th:replace="view/partials/_sidebar"> </div>
+                 <div class="main-panel">
+                            <!-- Radna povrsina -->
+                     <div class="content-wrapper">
+                       <div class="row">
+                         
+                         <div class="col-12 grid-margin">
+                           <div class="card">
+                             <div class="card-body">
+                              
+                               <h4 class="card-title">Вести</h4>
+                                 <p class="card-description"> Додавање нових вести </p>
+                                   <form class="forms-sample" action="#" th:action="@{${isAdd}?'/saveNews':'/updateNews'}"  th:object="${news}" method="post" enctype="multipart/form-data">
+                                      
+                                      <input type="hidden" class="form-control" th:field="*{id}">
+                                      
+                                     <div class="form-group">
+                                       <label for="exampleInputName1">Наслов вести:</label>
+                                       <input type="text" class="form-control" id="newTitle" placeholder="Наслов вести" th:field="*{newTitle}">
+                                     </div>
+                                     
+                                      <div class="form-group">
+                                       <label for="exampleTextarea1">Садржај вести:</label>
+                                       <textarea class="form-control" id="newtext" placeholder="Текст вести" rows="2" th:field="*{newText}"></textarea>
+                                     </div>
+                                     
+                                    <div class="form-group">
+                                        <label>Додавање фотографије:</label>
+                                          <input type="file"  class="form-control btn btn-info" id="imageList" placeholder="Изавери слику из датотеке" th:field="*{imageList}" multiple="multiple">
+                                    </div>
+                                    
+                                    <div class="form-group" th:if="${isAdd == false}">
+                                       <span th:each="newss : ${newsList}">
+                                       
+                                            <span th:each = "file, itrStat : ${newsImg}" th:if="${file.news.id == newss.id}"  >
+                                                  <img class="image" th:src="@{'/images/' + ${file.modifiedFileName}}" style="width:80px; height:80px; border-radius:50%; margin-left:10px;" />
+                                                <span class = "overlay">
+                                                  <a href="#" class="icon image-confirm-delete" title="image delete" th:attr="data-id=${itrStat.index}, data-name=${file.modifiedFileName}">
+                                                     <i class="fa fa-trash" style="color:red;"></i>
+                                                 </a>
+                                               </span>
+                                              
+                                               
+                                               
+                                             </span>
+                                             
+                                       </span>
+                                       <input type="hidden" class="form-control" th:field="*{removeImages}" id="removeImages">
+                                    </div>
+                                    
+                                     
+                                   
+                                   
+                                    
+                                    <div class="form-group">
+                                       <button type="submit" class="btn btn-success mr-2" th:text="${isAdd}?'Save':'Update'"></button>
+                                    </div>
+                                    
+                                    </form>
+                           </div>
+                      </div>
+                 </div>
+           
+           
+           <!-- List of news and possibility update  -->
+           
+           
+           
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                       <div class="alert alert-success alert-dismissible" th:if="${successMessage}" >
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong th:text="${successMessage}"></strong>
+                       </div>
+                    <h4 class="card-title">Објављене вести</h4>
+                    <p class="card-description"> Преглед недавно објављених вести... <code>www.vesti.com</code> </p>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col"> Насловна слика </th>
+                          <th scope="col"> Наслов вести </th>
+                          <th scope="col"> Садржај </th>
+                          <th scope="col"> Ажурирај/Бриши </th>
+                        </tr>
+                      </thead>
+                      <tbody >
+                        <tr th:each="news : ${newsList}">
+                          
+                          <td class="py-1" >
+                              <span th:each = "file, itrStat : ${newsImageList}" th:if="${file.news.id == news.id}">
+                                 <img class="image" th:src="@{'/images/' + ${file.modifiedFileName}}" />
+                              </span>
+                           </td>
+                          <td scope="row"><span class="d-inline-block text-truncate" style="max-width: 200px;" th:text="${news.newTitle}"></span></td>
+                          <td scope="row"><span class="d-inline-block text-truncate" style="max-width: 200px;" th:text="${news.newText}"></span></td>
+                          <td>
+                          
+                            
+                             <a th:href="@{'/viewuser/' + ${news.id}}"><i class="fa fa-eye" style="font-size:21px; padding:20px;"></i></a>
+                             <a th:href="@{'/editNews/' + ${news.id}}"><i class="fa fa-edit" style="font-size:21px; padding:20px;"></i></a>
+                             <a href="#" class="confirm-delete" th:attr="data-id=${news.id}, data-name=${news.newTitle}"><i class="fa fa-trash" style="font-size:21px; padding:20px;"></i></a>
+                          </td>
+                          
+                        </tr>
+                       
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+                                  
+                            
+                            </div>                   
+                          
+                     
+                     
+                     </div>
+               
+               
+               <div th:replace="view/partials/_footer"> </div>          
+        </div>
+    </div>
+ </div>
+</body>
+    <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../assets/js/shared/off-canvas.js"></script>
+    <script src="../assets/js/shared/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../assets/js/demo_1/dashboard.js"></script>
+    <script type="text/javascript">
+      $(function(){
+	 var images = [];
+	 $('.image-confirm-delete').on('click',function(e){
+		 e.preventDefault();
+		 var id = $(this).data('id');
+		 var name = $(this).data('name');
+		 images.push(name);
+		 $('#removeImages').val(images);
+		 $('#imageindex'+id).hide();
+	 });
+    	 
+    	 $('.confirm-delete').on('click',function(e){
+    		 e.preventDefault();
+    		 var id = $(this).data('id');
+    		 var name = $(this).data('name');
+    		 $("#modal-name").html(name);
+    		 $("#idModalLink").attr('href','/deleteNews/' + id);
+    		 $("#myModal").modal();
+    	 });
+    	 
+      });
+    	 
+     
+</script>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModallabel" aria-hidden="true" >
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div  class="modal-body" id="myModalBody">
+              <p>Do you want to delete (<span id="modal-name"></span>) record?</p>
+         </div>
+         <div class="modal-footer">
+             <a id="idModalLink" href="" class="btn btn-primary">Yes</a>
+             <button type="button" class="btn btn-default" data-dismiss=modal>No</button>
+         </div>
+      
+      
+      </div>
+   </div>
+
+</div>
+
+</html>

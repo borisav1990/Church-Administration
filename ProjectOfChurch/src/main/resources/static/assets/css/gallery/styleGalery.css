@@ -1,0 +1,34 @@
+
+ .col-lg-3 img{
+     
+     filter:grayscale(100%); /*sepija*/
+     transition: 1s;
+
+ }
+ .col-lg-3 img:hover{
+     filter:grayscale(0); /*vraca boju*/
+     transform: scale(1.1);
+     
+
+ }
+ 
+ .icon{
+   color:white;
+   font-size:40px;
+   position:absolute;
+   top:70%;
+   left:80%;
+   transform: translate (-50%, -50%);
+   -ms-transform: translate (-50%, -50%);
+   text-align: center;
+
+}
+.fa-trash:hover{
+     color: red;
+}
+    
+ 
+ 
+ 
+ 
+ 

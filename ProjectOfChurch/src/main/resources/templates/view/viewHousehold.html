@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head>
+<meta charset="UTF-8">
+
+
+
+
+
+
+<title>Insert title here</title>
+
+     
+    <script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
+  
+   <script type="text/javascript" src="webjars/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"></script>
+   <!-- <link rel="stylesheet" href="webjars/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">  -->
+    <script type="text/javascript" th:src="@{js/main.js}" src="..static/js/main.js" ></script>
+
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+     <link rel="stylesheet" href="../../../assets/vendors/iconfonts/font-awesome/css/font-awesome.min.css" />
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../assets/css/shared/style.css">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <!-- End Layout styles -->
+    <link rel="shortcut icon" href="../assets/images/favicon.png" />
+  
+   
+</head>
+<body>
+  
+
+    
+
+
+
+
+             
+        <div class="container-scroller">
+                 <div th:replace="view/partials/_navbar"></div>
+            <div class="container-fluid page-body-wrapper">
+                     <div th:replace="view/partials/_sidebar"> </div>
+                 <div class="main-panel">
+                            <!-- Radna povrsina -->
+                     <div class="content-wrapper">
+                     
+                            <div class="row">
+                            
+                               
+                                
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                       
+                           
+
+                          
+                   
+   <!-- 0000000000000000000000000000000000000000000 -->
+   <div id="accordion">
+   
+    <!-- ---------------------------------------------------------- -->
+      <div class="alert alert-success alert-dismissible" th:if="${messageSuccessSave}" >
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <strong th:text="${messageSuccessSave}"></strong>
+     </div>
+    <!-- ---------------------------------- -->
+     <div class="alert alert-danger alert-dismissible" th:if="${blankData}" >
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <strong th:text="${blankData}"></strong>
+    </div>
+    <!-- ------------------------------------------------------------ -->
+    <div class="alert alert-danger alert-dismissible" th:if="${listOfChanges}" >
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <strong  th:each= "change:${listOfChanges}" th:text="${change}"></strong>
+    </div>
+    
+    
+    
+    
+    
+   <div class="card" th:each="street: ${listOfStreet}" >
+    <div class="card-header" th:id="'heading_'+${street.id}">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse"  th:attr="data-target='#collapse_'+${street.id}"     aria-expanded="true" th:aria-controls="'collapse_'+${street.id}" th:text="${street.streetName}">
+          
+        </button>
+      </h5>
+    </div>
+
+    <div th:id="'collapse_'+${street.id}" class="collapse" th:aria-labelledby="'heading_'+${street.id}" data-parent="#accordion">
+      <div class="card-body" >
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Презиме</th>
+                      <th>Улаз</th>
+                      <th>Спрат</th>
+                      <th>Стан</th>
+                      <th>Слава</th>
+                      <th>Укућани</th>
+                      <th>Датум уноса</th>
+                      <th>Акција</th>
+                  </tr>
+            </thead>
+              <tbody>
+                 <tr th:each="household: ${listOfHouseholds}" th:if="${household.street.id == street.id}">
+                     <td th:text="${household.id}" ></td>
+                     <td th:text="${household.lastName}"></td>
+                     <td th:text="${household.entry}"></td>
+                     <td th:text="${household.floor}"></td>
+                     <td th:text="${household.numberOfApartment}">ад</td>
+                     <td th:text="${household.patron}"></td>
+                      <td>
+                         <div class="dropdown">
+                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 Погледај укућане
+                             </button>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                               <a th:each="parishioner: ${listOfParishioners}"  th:if="${parishioner.household.id == household.id}"   th:text="${parishioner.firstName + ' ' + parishioner.lastName}" class="dropdown-item" href="#">Парохијанин</a>
+                              
+                           </div>
+                         </div>
+                     </td>
+                     <td th:text="${household.createdDate}"></td>
+                     <td>
+                        <a th:href="@{'/viewuser/' + ${household.id}}"><i class="fa fa-eye" style="font-size:21px; padding:20px;"></i></a>
+                        <a th:href="@{'/editHousehold/' + ${household.id}}"><i class="fa fa-edit" style="font-size:21px; padding:20px;"></i></a>
+                        <a href="#" class="confirm-delete" th:attr="data-id=${household.id}, data-name=${household.lastName}"><i class="fa fa-trash" style="font-size:21px; padding:20px;"></i></a>
+                     </td>
+                     
+                 </tr>
+              
+              </tbody>
+          
+          </table>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+   <!-- 0000000000000000000000000000000000000000000   -->
+                                  
+                            
+                            </div>                   
+                          
+                     
+                     
+                     </div>
+               
+               
+               <div th:replace="view/partials/_footer"> </div>          
+        </div>
+    </div>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+</body>
+    
+    <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../assets/js/shared/off-canvas.js"></script>
+    <script src="../assets/js/shared/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../assets/js/demo_1/dashboard.js"></script>
+    <!-- End custom js for this page-->
+    
+  
+    
+    
+    
+   <script type="text/javascript">
+      $(function(){
+	 
+	 
+    	 $('.confirm-delete').on('click',function(e){
+    		 e.preventDefault();
+    		 var id = $(this).data('id');
+    		 var name = $(this).data('name');
+    		 $("#modal-name").html(name);
+    		 $("#idModalLink").attr('href','/deleteHousehold/' + id);
+    		 $("#myModal").modal();
+    	 });
+    	 
+      });
+    	 
+     
+</script>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModallabel" aria-hidden="true" >
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div  class="modal-body" id="myModalBody">
+              <p>Do you want to delete (<span id="modal-name"></span>) record?</p>
+         </div>
+         <div class="modal-footer">
+             <a id="idModalLink" href="" class="btn btn-primary">Yes</a>
+             <button type="button" class="btn btn-default" data-dismiss=modal>No</button>
+         </div>
+      
+      
+      </div>
+   </div>
+
+</div>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.addons.css">
+    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel ="stylesheet" href="../assets/css/gallery/lightbox.min.css">
+    <link rel ="stylesheet" href="../assets/css/gallery/styleGalery.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../assets/css/shared/style.css">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../assets/css/demo_1/style.css">
+    <!-- End Layout styles -->
+    <link rel="shortcut icon" href="../assets/images/favicon.png" />
+    
+</head>
+<body>
+
+             
+        <div class="container-scroller">
+                 <div th:replace="view/partials/_navbar"></div>
+            <div class="container-fluid page-body-wrapper">
+                     <div th:replace="view/partials/_sidebar"> </div>
+                 <div class="main-panel">
+                            <!-- Radna povrsina-->
+                     <div class="content-wrapper">
+                              <div class="row">
+                               
+                               
+                              
+                              
+                              
+                               <div class="container">
+                               
+                                    <form class="md-form"  action="#" th:action="@{'/updateGallery'}"   method="post" enctype="multipart/form-data">
+                                           <h3 class="font-weight-light text-center text-lg-left mt-5 mb-0">Изаберите фотографије за додавање у галерију:</h3>
+                                           <hr class="mt-2 mb-2">
+                                        <div class="file-field" title="Изаберите фотографије" >
+                                           <input type="file"  name="file"   multiple="multiple">
+                                        </div>
+                                        <hr class="mt-2 mb-2">
+                                        <div class="file-field" title="Сними фотографије" >
+                                           <button type="submit" class="btn btn-success mr-2" th:text="Сними"></button>
+                                        </div>
+                                       <input type="hidden" class="form-control" id="removePicture" name="removePicture">
+                                    </form>
+                                    <br>
+                                     
+                                    <div class="alert alert-success alert-dismissible" th:if="${messageSuccessUpload}" >
+                                         <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                         <strong th:text="${messageSuccessUpload}"></strong>
+                                    </div>
+                                    <div class="alert alert-warning alert-dismissible" th:if="${blankUpload}" >
+                                         <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                         <strong th:text="${blankUpload}"></strong>
+                                    </div>
+                                    
+                                    
+                            
+                                          <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Фотографије у Галерији:</h1>
+                                          <hr class="mt-2 mb-5">
+                                          <br>
+                                          <div class="alert alert-success alert-dismissible" th:if="${messageSuccessDelete}" >
+                                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                 <strong th:text="${messageSuccessDelete}"></strong>
+                                         </div>
+                            <div class="container">
+                            
+                            
+                                  <div class="col-lg-3 col-md-6 col-8" style="display: inline-block;" th:each="file, itrStat : ${picList}" th:id="'imageindex'+${itrStat.index}"  >
+                                      <a  th:href="@{'/gallery/' + ${file.fileModifiedName}}" data-lightbox="mygallery" data-title="Hram">
+                                         <img  class="img-fluid img-thumbnail" th:src="@{'/gallery/' + ${file.fileModifiedName}}" style="width:200px; height:200px;">
+                                      </a>
+                                      <a href="#" class="icon image-confirm-delete" title="Брисање фотографије" th:attr="data-id=${itrStat.index}, data-name=${file.fileModifiedName}" >
+                                         <i class="fa fa-trash" style="color:red;"></i>
+                                       </a>
+                                 </div> 
+                               </div>  
+                                  
+                                       
+                                    
+                                  
+                             </div>   
+                                    
+                                  
+                                  
+                            
+                            
+                            
+                             </div>                   
+                          </div>
+               <div th:replace="view/partials/_footer"> </div>          
+        </div>
+    </div>
+ </div>
+</body>
+     <script src="../assets/js/gallery/lightbox-plus-jquery.min.js"></script>
+    <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../assets/js/shared/off-canvas.js"></script>
+    <script src="../assets/js/shared/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../assets/js/demo_1/dashboard.js"></script>
+  <script type="text/javascript">
+      $(function(){
+	 var images = [];
+	 $('.image-confirm-delete').on('click',function(e){
+		 e.preventDefault();
+		 var id = $(this).data('id');
+		 var name = $(this).data('name');
+		 images.push(name);
+		 $('#removePicture').val(images);
+		 $('#imageindex' +id).hide();
+	 });
+      });
+	 </script>
+   
+</html>
